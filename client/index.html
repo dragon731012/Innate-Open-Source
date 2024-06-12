@@ -1,0 +1,254 @@
+<script src="/register-sw.js"></script>
+<script src="/colors.js"></script>
+<script src="/innate-config.js"></script> 
+<title>Innate - Chat Freely</title>
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+<meta name="description" content="Stop scrolling, start chatting with Innate, the ultimate chatting website for any purpose. Dive into lively conversations, create groups for your school or friend circle, and be whoever you want to be. Connect, discuss, and explore limitless possibilities!">
+<meta name="keywords" content="chatting website, online chat platform, group discussions, social interaction, virtual communities, messaging platform, communication hub, online conversations, friend groups, school groups, chat rooms, chat community, chatting network, online forum, connect with others">
+<div id="messages" style="opacity:0;"></div> 
+<form id="messageform">
+  <input id="messageinput" placeholder="Send a message...">
+</form> 
+<div id="navbar">
+  <a onclick="groups();" style="float:left;border-radius: 0 0 10px 0;" class="navitem">
+    <img src="/images/groups-light.png" class="navimage" style="height: 5vh;">
+  </a>
+  <a onclick="signout();" style="float:right; border-radius: 0 0 0 10px;" class="navitem">
+    <img src="/images/logout-light.png" class="navimage" style="height: 5vh;">
+  </a>
+  <a onclick="options();" style="float:right; border-radius: 0 0 0 10px;" class="navitem">
+    <img src="/images/settings-light.png" class="navimage" style="height: 5vh;">
+  </a>
+  <a onclick="newgroup();" style="float:left; border-radius: 0 0 0 10px;" class="navitem">
+    <img src="/images/new-light.png" class="navimage" style="height: 5vh;">
+  </a>
+  <a onclick="embedpage();" style="float:left; border-radius: 0 0 0 10px;" class="navitem">
+    <img src="/images/embed-light.png" class="navimage" style="height: 5vh;">
+  </a>
+</div>
+<iframe id="chat"></iframe>
+<iframe id="groups"></iframe>
+<style>
+  #groups{
+    display:none;
+    width:100%;
+    height:100%;
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    border:0px;
+  }
+  #chat{
+    display:block;
+    width:100%;
+    height:100%;
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    border:0px;
+  }
+  
+  #navbar{
+    z-index:999999;
+    width:100%;
+    position:absolute;
+    left:0px;
+    top:0px;
+  }
+  .navitem{
+    float:right;
+    text-decoration:none;
+    margin:10px;
+    height:5vh;
+    background:transparent;
+    cursor:pointer;
+  }
+  
+  ::-webkit-scrollbar {
+      width: 10px;
+      color: var(--primary);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary);
+      color: var(--secondary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      color: var(--primary);
+      background: var(--primary);
+  }
+  
+  ::placeholder{
+    color:var(--primary);
+  }
+
+  
+  #messageinput{
+    width:70%;
+    position:absolute;
+    text-align:left;
+    left:15%;
+    bottom:10px;
+    padding:10px;
+    font-size:25px;
+    color:var(--primary);
+    border-color:var(--primary);
+    background:transparent;
+    border-radius:25px;
+    outline:none;
+    height: 9vh;
+  }
+  #messages{
+    height:75vh;
+    position:absolute;
+    left:0px;
+    top:10%;
+    width:100%;
+    overflow-x:hidden;
+    overflow-y:scroll;
+  }
+  .messagebox{
+    margin-left:5px;
+    margin-right:5px;
+    display:flex;
+    flex-direction:column;
+    margin-bottom:15px;
+  }
+  .messagetext{
+    max-width: 40%;
+    width:fit-content;
+    background: var(--secondary);
+    padding-left: 5px !important;
+    padding: 7px;
+    border-radius: 0px 10px 10px 10px;
+    color: var(--primary);
+  }
+  .usertext{
+    margin-left: 5px;
+    margin-bottom:3px;
+    color: var(--primary);
+  }
+  body{
+    background:var(--bg);
+    overflow:hidden;
+  }
+</style>
+<script defer>
+  if (localStorage.getItem("darkMode")=="yes"){
+    var images=document.getElementsByClassName("navimage");
+    for (var i=0;i<images.length;i++){
+      images[i].src=images[i].src.replace("light","dark");
+    }
+  }
+
+  var groupsframe=document.getElementById("groups");
+  
+  document.getElementById("groups").src="/groups";
+
+  function getText(file){
+    return new Promise((resolve) => {
+      fetch(file)
+        .then((response) => {
+          return response.text();
+        })
+        .then((txt) => {
+          resolve(txt.trim());
+        });
+    });
+  }
+
+  function newgroup(){
+    if (document.getElementById("chat").src!=window.location.href+"new"){
+      groupsframe.style.display="none";
+      document.getElementById("chat").src="/new";
+    } else {
+      document.getElementById("chat").src="/chat/?group="+groupinuse+"&password="+passwordinuse;
+    }
+  }
+
+  function options(){
+    if (document.getElementById("chat").src!=window.location.href+"settings"){
+      groupsframe.style.display="none";
+      document.getElementById("chat").src="/settings";
+    } else {
+      document.getElementById("chat").src="/chat/?group="+groupinuse+"&password="+passwordinuse;
+    }
+  }
+
+  function embedpage(){
+    if (document.getElementById("chat").src!=window.location.href+"embed"){
+      groupsframe.style.display="none";
+      document.getElementById("chat").src="/embed";
+    } else {
+      document.getElementById("chat").src="/chat/?group="+groupinuse+"&password="+passwordinuse;
+    }
+  }
+  
+  function groups(){
+    var groups=document.getElementById("groups");
+    if (groupsframe.style.display=="none"){
+      groupsframe.style.display="block";
+    } else {
+      groupsframe.style.display="none";
+    }
+  }
+  
+  var groupinuse=localStorage.getItem("groupname");
+  var currentgroup=groupinuse;
+  var passwordinuse=localStorage.getItem("grouppassword");
+  
+  if (passwordinuse=="" || passwordinuse==null){
+    passwordinuse="none";
+  }
+  if (groupinuse==null){
+    groupinuse="general";
+    passwordinuse="none";
+  }
+
+  document.getElementById("chat").src="/chat/?group="+groupinuse+"&password="+passwordinuse;
+  async function verify(){
+    var verify=await getText(localStorage.getItem("server")+"group.php/?val=v&group="+groupinuse+"&password="+passwordinuse);
+    if (verify!="Valid"){
+      groups();
+    } else {
+      document.getElementById("chat").src="/chat/?group="+groupinuse+"&password="+passwordinuse;
+      groupsframe.style.display="none";
+    }
+  }
+  verify();
+
+  function signout(){
+    localStorage.removeItem("username");
+    localStorage.removeItem("password");
+    window.location.href="/welcome";
+  }
+  
+  var clientuser=localStorage.getItem("username");
+  var clientpassword=localStorage.getItem("password");
+
+  if (clientuser==undefined || clientuser==null){
+    window.location.href="/welcome";
+  }
+  async function checklogin(){
+    var verify=await getText(localStorage.getItem("server")+"user.php/?val=r&user="+clientuser+"&password="+clientpassword);
+    if (verify!="Valid"){
+      signout();
+    }
+  }
+  checklogin();
+ 
+  setInterval(()=>{
+    currentgroup=localStorage.getItem("groupname");
+    if (currentgroup!=groupinuse){
+      groupinuse=currentgroup;
+      passwordinuse=localStorage.getItem("grouppassword");
+      document.getElementById("groups").style.display="none";
+      document.getElementById('groups').contentWindow.location.reload();
+      document.getElementById("messages").style.opacity="0";
+      checklogin();
+      verify();
+    }
+  },10);
+</script>

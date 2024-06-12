@@ -1,0 +1,190 @@
+<script src="/innate-config.js"></script>
+<script src="/colors.js"></script>
+<script src="/swears.js"></script>
+<script src="/pure.js"></script>
+<div id="groups"><div style="display:none;">e</div></div>
+<style>
+  body{
+    background:var(--bg);
+    overflow:hidden;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary); 
+    border-radius: 10px;
+  }
+  @keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: gray; 
+  }
+  #groups{
+    width:100%;
+    height:90%;
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    overflow-y:scroll;
+    overflow-x:hidden;
+  }
+  .passwordinput{
+    outline: none;
+    width: 30%;
+    padding: 0.2vh;
+    position: absolute;
+    right: 10%;
+    color: var(--primary);
+    background: transparent;
+    border-radius: 25px;
+    border: 2px solid var(--primary);
+    font-size: 2.2vh;
+    padding-left: 1vh;
+  }
+  .grouptext{
+    position: relative;
+    left: 5px;
+    display: flex;
+    font-size: 2.5vh;
+    color:var(--primary);
+  }
+  ::placeholder{
+    color:var(--primary);
+  }
+  .groupbox{
+    height: 5vh;
+    display: flex;
+    border-bottom: 3px solid var(--primary);
+    width: 100%;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .groupbutton:disabled{
+    opacity:0.5;
+    cursor: default;
+  }
+  .groupbutton{
+    cursor:pointer;
+    position: relative;
+    right: 5px;
+    display: flex;
+    background: var(--primary);
+    color:var(--bg);
+    border: 0px;
+    border-radius: 27px;
+    float: right;
+    font-size: 2.3vh;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    padding-top: 0.6vh;
+    padding-bottom: 0.6vh;
+  }
+</style>
+<script defer>
+  var clientuser=localStorage.getItem("username");
+  var clientpassword=localStorage.getItem("password");
+
+  if (clientuser==undefined || clientuser==null){
+    window.location.href="/signup";
+  }
+
+  var groupPasswords=localStorage.getItem("groupPasswords");
+  if (groupPasswords){
+    groupPasswords=JSON.parse(groupPasswords);
+  } else {
+    groupPasswords={};
+  }
+
+  function updatePasswords(){
+    if (!groupPasswords[localStorage.getItem("groupname")]){
+      groupPasswords[localStorage.getItem("groupname")]={password:""};
+    }
+    groupPasswords[localStorage.getItem("groupname")].password=localStorage.getItem("grouppassword");
+    localStorage.setItem("groupPasswords",JSON.stringify(groupPasswords));
+  }
+    
+  function getText(file){
+    return new Promise((resolve) => {
+      fetch(file)
+        .then((response) => {
+          return response.text();
+        })
+        .then((txt) => {
+          resolve(txt.trim());
+        });
+    });
+  }
+  async function join(element){
+    var nopassword=await getText(localStorage.getItem("server")+"group.php/?val=v&group="+element.dataset.group+"&password=none");
+    nopassword=nopassword.trim();
+    if (nopassword!=="Valid"){
+      var passwordinuse=document.getElementById(element.dataset.group).value;
+      var verify=await getText(localStorage.getItem("server")+"group.php/?val=v&group="+element.dataset.group+"&password="+passwordinuse);
+      verify = verify.trim();
+      if (verify==="Valid"){
+        localStorage.setItem("groupname",element.dataset.group);
+        localStorage.setItem("grouppassword",passwordinuse);
+        updatePasswords();
+      } else {
+        document.getElementById(element.dataset.group).style.animation='shake 0.5s';
+        document.getElementById(element.dataset.group).addEventListener('animationend',() => {
+            document.getElementById(element.dataset.group).style.animation=null;
+          });
+      }
+    } else {
+      localStorage.setItem("groupname",element.dataset.group);
+      localStorage.setItem("grouppassword","none");
+    }
+  }
+  async function start(){
+    groups=await getText(localStorage.getItem("server")+"group.php?val=r&group=&password=");
+    var grouplines=groups.toString().split("|");
+    var groupjson={groups: []};
+    for(var i=0;i<grouplines.length-1;i++){
+      var tempjson={};
+      tempjson.name=grouplines[i];
+      groupjson.groups.push(tempjson);
+    }
+    
+    for (var i=0;i<groupjson.groups.length;i++){
+      var groupdiv=document.createElement("div");
+      groupdiv.className="groupbox";
+
+      if (groupjson.groups[i].name!=localStorage.getItem("groupname")){
+        groupdiv.innerHTML="<div class='grouptext'>"+filter(groupjson.groups[i].name)+"</div><input class='passwordinput' placeholder='Password...' style='display:none;' type='password' id='"+escapeHTML(groupjson.groups[i].name)+"'><button class='groupbutton' data-group='"+escapeHTML(groupjson.groups[i].name)+"' onclick='join(this);'>Join</button>";
+      } else {
+        groupdiv.innerHTML="<div class='grouptext'>"+filter(groupjson.groups[i].name)+"</div><input class='passwordinput' placeholder='Password...' style='display:none;' type='password' id='"+escapeHTML(groupjson.groups[i].name)+"'><button class='groupbutton' data-group='"+escapeHTML(groupjson.groups[i].name)+"' onclick='join(this);' disabled>Joined</button>";
+      }
+      document.getElementById("groups").appendChild(groupdiv);
+
+      if (!groupPasswords[groupjson.groups[i].name]){
+        groupPasswords[groupjson.groups[i].name]={password:""};
+      }
+
+      document.getElementsByClassName("passwordinput")[document.getElementsByClassName("passwordinput").length-1].value=groupPasswords[groupjson.groups[i].name].password;
+
+      var nopassword=await getText(localStorage.getItem("server")+"group.php/?val=v&group="+groupjson.groups[i].name+"&password=none");
+      if (nopassword!="Valid"){
+        document.getElementById(groupjson.groups[i].name).style.display="block";
+      }
+    }
+    document.getElementsByClassName("groupbox")[0].style.borderTop="3px solid black";
+  }
+  start();
+</script>

@@ -1,0 +1,69 @@
+<title>Innate - Welcome</title>
+<script src="/colors.js"></script>
+<div id="cont">
+  <div id="title">Innate</div>
+  <div id="def">existing naturally since birth</div>
+  <div id="buttons">
+    <a href="/signup">
+      <div class="button">Sign Up</div>
+    </a>
+    <a href="/login">
+      <div class="button">Log In</div>
+    </a>
+  </div>
+</div>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Orbitron:wght@400..900&family=Rubik+Distressed&family=Special+Elite&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Orbitron:wght@400..900&family=Rubik+Distressed&family=Special+Elite&display=swap');
+  
+  body{
+    background: var(--bg);
+  }
+
+  a{
+    text-decoration: unset;
+    color: unset;
+  }
+  #cont{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 80%;
+    position:absolute;
+    bottom:20%;
+    left:0px;
+    width:100%;
+  }
+  #title{
+    color: var(--primary);
+    font-size: 10vh;
+    font-family: "Special Elite", system-ui;
+    font-weight: 100;
+  }
+  #def{
+    font-size: 2vh;
+    font-style: italic;
+    font-size: 2.3vh;
+    color:var(--primary);
+    font-style: italic;
+    font-weight: 900;
+  }
+  #buttons{
+    display:flex;
+  }
+  .button{
+    margin-top: 20px;
+    margin-right: 5px;
+    margin-left: 5px;
+    background: var(--button);
+    font-size: 2.5vh;
+    border: 0px solid var(--primary);
+    text-align: center;
+    padding: 1.5vh;
+    border-radius: 50px;
+    font-family: "Merriweather", serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+</style>

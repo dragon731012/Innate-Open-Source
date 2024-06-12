@@ -1,0 +1,119 @@
+<script src="/colors.js"></script>
+<div id="cont">
+  <h1>Create a Group</h1>
+  <h3 id="error">&nbsp;</h3>
+  <input id="group" placeholder="Group Name" spellcheck="false" autocomplete="off">
+  <input id="password" type="password" placeholder="Group Password" spellcheck="false" autocomplete="off">
+  <button onclick="create();">Create</button>
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Orbitron:wght@400..900&family=Rubik+Distressed&family=Special+Elite&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Orbitron:wght@400..900&family=Rubik+Distressed&family=Special+Elite&display=swap');
+
+  @keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+  
+  h1{
+    font-size: 5vh;
+    color: var(--primary);
+    font-family: "Special Elite", system-ui;
+    font-weight: 100;
+  }
+
+  h3{
+    font-style: normal;
+    font-family: sans-serif;
+    font-size: 1.5vh;
+    margin: 0px;
+  }
+  
+  #cont{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--container);
+    padding: 5vw;
+    border-radius: 3vh;
+  }
+  
+  #group, #password{
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    border-radius: 1vh;
+    font-size: 3vh;
+    background: transparent;
+    padding: 0.4vw;
+    margin: 1vw;
+    outline: none;
+    font-family: "Merriweather", serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+  ::placeholder{
+    color:var(--primary);
+  }
+  body{ 
+    width:100%;
+    height:100%;
+    overflow:hidden; 
+    display:flex;
+    flex-direction:column; 
+    align-items:center; 
+    justify-content:center;
+    background:var(--bg);
+  }
+  
+  button{
+    cursor: pointer;
+    margin-top: 20px;
+    margin-right: 5px;
+    margin-left: 5px;
+    font-size: 2.5vh;
+    border: 0px solid var(--primary);
+    text-align: center;
+    padding: 1.5vh;
+    border-radius: 50px;
+    font-family: "Merriweather", serif;
+    font-weight: 300;
+    font-style: normal;
+    background: var(--button);
+  }
+</style>
+<script defer>
+  function getText(file){
+    return new Promise((resolve) => {
+      fetch(file)
+        .then((response) => {
+          return response.text();
+        })
+        .then((txt) => {
+          resolve(txt.trim());
+        });
+    });
+  }
+  async function create(){
+    var name=document.getElementById("group").value;
+    var password=document.getElementById("password").value;
+    var reply=await getText(localStorage.getItem("server")+"group.php/?val=w&group="+name+"&password="+password);
+    if (reply=="Failure"){
+    } else {
+      localStorage.setItem("groupname",password);
+      localStorage.setItem("grouppassword",name);
+      window.location.href="/chat?group="+name+"&password="+password;
+    }
+  }
+</script>
