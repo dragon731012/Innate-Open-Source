@@ -1,4 +1,11 @@
 <?php
+foreach ($_GET as $key => $value) {
+    $escapedValue = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    $cleanValue = str_replace('|', '', $escapedValue);
+    $cleanValue = str_replace('/', '', $cleanValue);
+    $cleanValue = str_replace('\\', '', $cleanValue);
+    $_GET[$key] = $cleanValue;
+}
 
 if (isset($_GET["val"]) && $_GET["val"] == "rm" && isset($_GET["group"]) && isset($_GET["admin_user"]) && isset($_GET["admin_password"]) && isset($_GET["target_user"]) && isset($_GET["text"]) && isset($_GET["gp"])) {
 

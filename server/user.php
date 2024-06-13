@@ -2,6 +2,8 @@
 foreach ($_GET as $key => $value) {
     $escapedValue = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     $cleanValue = str_replace('|', '', $escapedValue);
+    $cleanValue = str_replace('/', '', $cleanValue);
+    $cleanValue = str_replace('\\', '', $cleanValue);
     $_GET[$key] = $cleanValue;
 }
 

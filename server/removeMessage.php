@@ -1,4 +1,12 @@
 <?php
+foreach ($_GET as $key => $value) {
+    $escapedValue = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    $cleanValue = str_replace('|', '', $escapedValue);
+    $cleanValue = str_replace('/', '', $cleanValue);
+    $cleanValue = str_replace('\\', '', $cleanValue);
+    $_GET[$key] = $cleanValue;
+}
+
 if (isset($_GET["val"]) && $_GET["val"] == "rm" && isset($_GET["group"]) && isset($_GET["admin_user"]) && isset($_GET["admin_password"]) && isset($_GET["target_user"]) && isset($_GET["text"]) && isset($_GET["gp"])) {
 
     $group = $_GET["group"];
@@ -12,15 +20,15 @@ if (isset($_GET["val"]) && $_GET["val"] == "rm" && isset($_GET["group"]) && isse
     }
 
     // Encrypt group and group password for validation
-    $groupEncrypted = openssl_encrypt($group, 'AES-256-CBC', "aJBKnjVGHvOHvjkvgJHBbhjGCFXdVSERTDXGbhjGYFhnjjxfdshfJLJL", 0, 'e3b0c44298fc1c14');
-    $grouppasswordEncrypted = openssl_encrypt($grouppassword, 'AES-256-CBC', "aJBKnjVGHvOHvjkvgJHBbhjGCFXdVSERTDXGbhjGYFhnjjxfdshfJLJL", 0, 'e3b0c44298fc1c14');
+    $groupEncrypted = openssl_encrypt($group, 'AES-256-CBC', $_ENV['key'], 0, $_ENV['iv']);
+    $grouppasswordEncrypted = openssl_encrypt($grouppassword, 'AES-256-CBC', $_ENV['key'], 0, $_ENV['iv']);
 
     // Check if the group and its password are valid
     if (strpos(file_get_contents("groups.txt"), ($groupEncrypted . ":" . $grouppasswordEncrypted)) !== false) {
         
         // Encrypt admin user and admin password for validation
-        $adminUserEncrypted = openssl_encrypt($adminUser, 'AES-256-CBC', "aJBKnjVGHvOHvjkvgJHBbhjGCFXdVSERTDXGbhjGYFhnjjxfdshfJLJL", 0, 'e3b0c44298fc1c14');
-        $adminPasswordEncrypted = openssl_encrypt($adminPassword, 'AES-256-CBC', "aJBKnjVGHvOHvjkvgJHBbhjGCFXdVSERTDXGbhjGYFhnjjxfdshfJLJL", 0, 'e3b0c44298fc1c14');
+        $adminUserEncrypted = openssl_encrypt($adminUser, 'AES-256-CBC', $_ENV['key'], 0, $_ENV['iv']);
+        $adminPasswordEncrypted = openssl_encrypt($adminPassword, 'AES-256-CBC', $_ENV['key'], 0, $_ENV['iv']);
 
         // Check if the admin user and password are valid
         if (strpos(file_get_contents("users.txt"), ($adminUserEncrypted . ":" . $adminPasswordEncrypted)) !== false) {
@@ -37,8 +45,8 @@ if (isset($_GET["val"]) && $_GET["val"] == "rm" && isset($_GET["group"]) && isse
                     $messageFound = false;
 
                     // Encrypt the target user and text for comparison
-                    $targetUserEncrypted = openssl_encrypt($targetUser, 'AES-256-CBC', "aJBKnjVGHvOHvjkvgJHBbhjGCFXdVSERTDXGbhjGYFhnjjxfdshfJLJL", 0, 'e3b0c44298fc1c14');
-                    $textEncrypted = openssl_encrypt($text, 'AES-256-CBC', "aJBKnjVGHvOHvjkvgJHBbhjGCFXdVSERTDXGbhjGYFhnjjxfdshfJLJL", 0, 'e3b0c44298fc1c14');
+                    $targetUserEncrypted = openssl_encrypt($targetUser, 'AES-256-CBC', $_ENV['key'], 0, $_ENV['iv']);
+                    $textEncrypted = openssl_encrypt($text, 'AES-256-CBC', $_ENV['key'], 0, $_ENV['iv']);
 
                     // Iterate over messages in reverse order and remove the last found one
                     for ($i = count($messages) - 1; $i >= 0; $i--) {

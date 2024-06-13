@@ -2,11 +2,12 @@
 foreach ($_GET as $key => $value) {
     $escapedValue = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     $cleanValue = str_replace('|', '', $escapedValue);
+    $cleanValue = str_replace('/', '', $cleanValue);
+    $cleanValue = str_replace('\\', '', $cleanValue);
     $_GET[$key] = $cleanValue;
 }
 
 if (isset($_GET["val"]) && isset($_GET["group"]) && isset($_GET["user"]) && isset($_GET["text"]) && isset($_GET["up"]) && isset($_GET["gp"])){
-
 if (isset($_GET["val"]) && $_GET["val"]=="w" && strpos(strtolower($_GET["group"]),"users")==false){
     $file = fopen("groups/" . $_GET["group"] . ".txt", 'a');
 
