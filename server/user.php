@@ -8,7 +8,14 @@ foreach ($_GET as $key => $value) {
 }
 
 if (isset($_GET["val"]) && isset($_GET["user"]) && isset($_GET["password"])){
-
+    function containsDisallowedCharacters($input) {
+        $pattern = "/[^a-zA-Z0-9_\-\'\"\,\.#@&!?+=\(\)\%\^\[\]\{\}\;\:]/";
+        return preg_match($pattern, $input) === 1;
+    }
+    if (containsDisallowedCharacters($_GET["user"])){
+        echo "Failure";
+        exit;
+    }
 if ($_GET["val"]=="w"){
     $file = fopen('users.txt', 'a');
     $user = $_GET["user"];

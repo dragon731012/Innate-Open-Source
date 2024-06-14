@@ -8,7 +8,15 @@ foreach ($_GET as $key => $value) {
 }
 
 if (isset($_GET["val"]) && isset($_GET["group"]) && isset($_GET["user"]) && isset($_GET["text"]) && isset($_GET["up"]) && isset($_GET["gp"])){
-if (isset($_GET["val"]) && $_GET["val"]=="w" && strpos(strtolower($_GET["group"]),"users")==false){
+    function containsDisallowedCharacters($input) {
+        $pattern = "/[^a-zA-Z0-9_\-\'\"\,\.#@&!?+=\(\)\%\^\[\]\{\}\;\:]/";
+        return preg_match($pattern, $input) === 1;
+    }
+    if (containsDisallowedCharacters($_GET["user"])){
+        echo "Failure";
+        exit;
+    }
+    if (isset($_GET["val"]) && $_GET["val"]=="w" && strpos(strtolower($_GET["group"]),"users")==false){
     $file = fopen("groups/" . $_GET["group"] . ".txt", 'a');
 
     $user = $_GET["user"];

@@ -8,6 +8,14 @@ foreach ($_GET as $key => $value) {
 }
 
 if (isset($_GET["val"]) && isset($_GET["group"]) && isset($_GET["password"])){
+    function containsDisallowedCharacters($input) {
+        $pattern = "/[^a-zA-Z0-9_\-\'\"\,\.#@&!?+=\(\)\%\^\[\]\{\}\;\:]/";
+        return preg_match($pattern, $input) === 1;
+    }
+    if (containsDisallowedCharacters($_GET["group"])){
+        echo "Failure";
+        exit;
+    }
     if (isset($_GET["val"]) && $_GET["val"]=="w"){
         $file = fopen('groups.txt', 'a');
         $group = $_GET["group"];
