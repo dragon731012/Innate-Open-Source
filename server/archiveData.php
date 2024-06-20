@@ -15,7 +15,11 @@ if (!file_exists('started.txt')) {
     exit;
 }
 
-$directory = '/var/www/html/server/groups/';
+$directories = [
+    '/var/www/html/server/groups/',
+    '/var/www/html/server/opendm/',
+    '/var/www/html/server/dm/'
+];
 
 $additionalFiles = [
     '/var/www/html/server/groups.txt',
@@ -26,16 +30,18 @@ $zip = new ZipArchive();
 $zipFileName = 'groups.zip';
 
 if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
-    $files = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($directory),
-        RecursiveIteratorIterator::LEAVES_ONLY
-    );
+    foreach ($directories as $directory) {
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
 
-    foreach ($files as $name => $file) {
-        if (!$file->isDir()) {
-            $filePath = $file->getRealPath();
-            $relativePath = substr($filePath, strlen($directory));
-            $zip->addFile($filePath, 'groups/' . $relativePath);
+        foreach ($files as $name => $file) {
+            if (!$file->isDir()) {
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($directory));
+                $zip->addFile($filePath, basename($directory) . '/' . $relativePath);
+            }
         }
     }
 

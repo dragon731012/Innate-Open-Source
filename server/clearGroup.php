@@ -24,8 +24,8 @@ if (isset($_GET["val"]) && $_GET["val"] == "rm" && isset($_GET["group"]) && isse
 
     if (strpos(file_get_contents("groups.txt"), ($groupEncrypted . ":" . $grouppasswordEncrypted)) !== false) {
         
-        $adminUserEncrypted = openssl_encrypt($adminUser, 'AES-256-CBC', $_ENV['archivekey'], 0, $_ENV['iv']);
-        $adminPasswordEncrypted = openssl_encrypt($adminPassword, 'AES-256-CBC', $_ENV['archivekey'], 0, $_ENV['iv']);
+        $adminUserEncrypted = openssl_encrypt($adminUser, 'AES-256-CBC', $_ENV['key'], 0, $_ENV['iv']);
+        $adminPasswordEncrypted = openssl_encrypt($adminPassword, 'AES-256-CBC', $_ENV['key'], 0, $_ENV['iv']);
 
         if (strpos(file_get_contents("users.txt"), ($adminUserEncrypted . ":" . $adminPasswordEncrypted)) !== false) {
 
