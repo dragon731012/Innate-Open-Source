@@ -26,7 +26,9 @@ if (isset($_GET["val"]) && isset($_GET["currentuser"]) && isset($_GET["targetuse
         $newtext="";
         $failed=false;
         for ($i=0;$i<(sizeof($dms)-1);$i++){
-            if ($dms[i]==$_GET["currentuser"] || $dms[i]==$_GET["targetuser"]){
+            $temp=openssl_decrypt($dms[$i], 'AES-256-CBC', $_ENV['key'], 0, $_ENV['iv']);
+            echo $temp . "<br>";
+            if ($temp==$_GET["targetuser"]){
                 $failed=true;
             }
         }

@@ -26,6 +26,7 @@ COPY ./server/admins.txt /var/www/html/server/
 COPY ./server/groups /var/www/html/server/groups
 COPY ./server/dm /var/www/html/server/dm
 COPY ./server/opendm /var/www/html/server/opendm
+COPY ./server/unread /var/www/html/server/unread
 
 # Set the working directory to the server directory
 WORKDIR /var/www/html/server

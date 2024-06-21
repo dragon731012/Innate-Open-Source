@@ -18,7 +18,8 @@ if (!file_exists('started.txt')) {
 $directories = [
     '/var/www/html/server/groups/',
     '/var/www/html/server/opendm/',
-    '/var/www/html/server/dm/'
+    '/var/www/html/server/dm/',
+    '/var/www/html/server/unread/'
 ];
 
 $additionalFiles = [
