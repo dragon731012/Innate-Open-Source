@@ -2,14 +2,156 @@
 <script src="/colors.js"></script>
 <script src="/swears.js"></script>
 <script src="/pure.js"></script>
-<div id="groups"><div style="display:none;">e</div></div>
+
+<div class="sections-container">
+  <div class="section">
+    <div class="section-header" id="favoritesheader" onclick="opensection('favorites')" style="margin-top:10vh;">Favorites</div>
+    <div class="section-content" id="favorites">
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-header" onclick="opensection('groups')" style="opacity:0;">All</div>
+    <div class="section-content" id="groups">
+    </div>
+  </div>
+</div>
+
+<div id="dms"><div style="display:none;">e</div></div>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Orbitron:wght@400..900&family=Rubik+Distressed&family=Special+Elite&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Orbitron:wght@400..900&family=Rubik+Distressed&family=Special+Elite&display=swap');
+
+  .sections-container {
+      display: flex;
+    flex-direction: column;
+    width: 100vw;
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100vh;
+}
+
+.section-header {
+      background-color: var(--button);
+    color: var(--primary);
+    margin: 0px;
+    cursor: pointer;
+    height: 5vh;
+  font-family: "Special Elite", system-ui;
+    text-align: center;
+    user-select: none;
+    font-size: 3vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-content {
+    height: 100vh;
+    margin: 0px;
+  bottom: 0.5vh;
+    transition: 0.7s;
+  background:var(--bg);
+  height: 83.5vh;
+}
+
+  
+
+  #dms{
+    width:100%;
+    height:90%;
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    overflow-y:scroll;
+    overflow-x:hidden;
+  }
+  .dminput{
+    outline: none;
+    width: 30%;
+    padding: 0.2vh;
+    position: absolute;
+    right: 10%;
+    color: var(--primary);
+    background: transparent;
+    border-radius: 25px;
+    border: 2px solid var(--primary);
+    font-size: 2.2vh;
+    padding-left: 1vh;
+  }
+  .dmtext{
+    position: relative;
+    left: 5px;
+    display: flex;
+    font-size: 2.5vh;
+    color:var(--primary);
+  }
+  .dmbox{
+    height: 5vh;
+    display: flex;
+    border-bottom: 3px solid var(--primary);
+    width: 100%;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .dmbutton:disabled{
+    opacity:0.5;
+    cursor: default;
+  }
+  .dmbutton{
+    cursor:pointer;
+    position: relative;
+    right: 5px;
+    display: flex;
+    background: var(--primary);
+    color:var(--bg);
+    border: 0px;
+    border-radius: 27px;
+    float: right;
+    font-size: 2.3vh;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    padding-top: 0.6vh;
+    padding-bottom: 0.6vh;
+  }
+
+  
   body{
     background:var(--bg);
     overflow:hidden;
   }
   ::-webkit-scrollbar {
     width: 10px;
+  }
+
+  .passwordcont{
+    position: fixed;
+    width: 40vh;
+    background: var(--container);
+    height: 40vh;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    pointer-events:all;
+    flex-direction: column;
+    border-radius: 3vh;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+
+  .paswordhead{
+    font-size: 4.5vh;
+    color: var(--primary);
+    font-weight: 100;
   }
   
   ::-webkit-scrollbar-thumb {
@@ -32,68 +174,80 @@
   ::-webkit-scrollbar-thumb:hover {
     background: gray; 
   }
-  #groups{
-    width:100%;
-    height:90%;
-    position:absolute;
-    left:0px;
-    bottom:0px;
-    overflow-y:scroll;
-    overflow-x:hidden;
+  #groups, #favorites{
+    width: 100%;
+    height: 90%;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    overflow-y: scroll;
+    display: ruby;
+    text-align: center;
   }
   .passwordinput{
     outline: none;
-    width: 30%;
+    width: 25vh;
     padding: 0.2vh;
-    position: absolute;
-    right: 10%;
     color: var(--primary);
     background: transparent;
     border-radius: 25px;
     border: 2px solid var(--primary);
-    font-size: 2.2vh;
     padding-left: 1vh;
+    font-size: 3vh;
   }
   .grouptext{
+    font-size: 4vh;
+    font-weight: 200;
+    text-align: left;
     position: relative;
-    left: 5px;
-    display: flex;
-    font-size: 2.5vh;
-    color:var(--primary);
+    top: 5vh;
+    color: var(--primary);
   }
   ::placeholder{
+    grid-template-co
     color:var(--primary);
   }
   .groupbox{
-    height: 5vh;
+    min-width: 15vh;
+    background: var(--container);
+    height: 23vh;
+    border-radius: 4.5vh;
+    flex-direction: column;
+    overflow: hidden;
     display: flex;
-    border-bottom: 3px solid var(--primary);
-    width: 100%;
     align-items: center;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    flex-direction: row;
-    justify-content: space-between;
+    margin: 1vh;
+    padding-left: 3vh;
+    padding-right: 3vh;
+    max-width: 30vh;
   }
   .groupbutton:disabled{
     opacity:0.5;
     cursor: default;
   }
+  .star{
+    width: 3vh;
+    align-self: end;
+    position: absolute;
+    padding-top: 2vh;
+    cursor: pointer;
+  }
   .groupbutton{
-    cursor:pointer;
-    position: relative;
-    right: 5px;
-    display: flex;
+    cursor: pointer;
     background: var(--primary);
-    color:var(--bg);
+    color: var(--bg);
     border: 0px;
     border-radius: 27px;
-    float: right;
-    font-size: 2.3vh;
+    font-size: 3vh;
     padding-left: 1vh;
     padding-right: 1vh;
     padding-top: 0.6vh;
     padding-bottom: 0.6vh;
+    position: relative;
+    top: 10vh;
+  }
+  .x{
+    position: absolute; right: 0px; top: 0px; font-size: 4vh; font-weight: 100; border: 0px; background: transparent; margin: 2vh; cursor:pointer;
   }
   .unread{
     background: red;
@@ -109,6 +263,14 @@
   var clientuser=localStorage.getItem("username");
   var clientpassword=localStorage.getItem("password");
 
+  var starred=localStorage.getItem("starred");
+  if (starred){
+    starred=JSON.parse(starred);
+  } else {
+    starred={};
+  }
+  
+
   if (clientuser==undefined || clientuser==null){
     window.location.href="/signup";
   }
@@ -120,6 +282,40 @@
     groupPasswords={};
   }
 
+  function updateStars(){
+    var stars=document.getElementsByClassName("star");
+    for (var i=0;i<stars.length;i++){
+      if (starred[stars[i].parentNode.querySelector(".passwordcont").querySelector(".passwordinput").id]=="yes"){
+        stars[i].src="/images/star.png";
+      } else {
+        stars[i].src="/images/stardark.png";
+      }
+    }
+    localStorage.setItem("starred",JSON.stringify(starred));
+  }
+
+  function addStar(groupDiv){
+    const favoritesSection = document.getElementById("favorites");
+    const starIcon = groupDiv.querySelector(".star");
+    starIcon.onclick = function () {
+      star(this);
+    };
+    favoritesSection.appendChild(groupDiv);
+  }
+
+  function removeStar(groupName){
+    const favoritesSection = document.getElementById("favorites");
+    const groupDivs = favoritesSection.getElementsByClassName("groupbox");
+  
+    for (let i = 0; i < groupDivs.length; i++) {
+      const input = groupDivs[i].querySelector(".passwordcont .passwordinput");
+      if (input && input.id === groupName) {
+        favoritesSection.removeChild(groupDivs[i]);
+        break;
+      }
+    }
+  }
+
   function updatePasswords(){
     if (!groupPasswords[localStorage.getItem("groupname")]){
       groupPasswords[localStorage.getItem("groupname")]={password:""};
@@ -127,7 +323,7 @@
     groupPasswords[localStorage.getItem("groupname")].password=localStorage.getItem("grouppassword");
     localStorage.setItem("groupPasswords",JSON.stringify(groupPasswords));
   }
-    
+  
   function getText(file){
     return new Promise((resolve) => {
       fetch(file)
@@ -140,15 +336,34 @@
     });
   }
 
+  function star(element){
+    const groupName = element.parentNode.querySelector(".passwordcont .passwordinput").id;
+    const groupDiv = element.parentNode;
+    
+    var currentstarred=starred[element.parentNode.querySelector(".passwordcont").querySelector(".passwordinput").id];
+    if (currentstarred=="yes"){
+      starred[element.parentNode.querySelector(".passwordcont").querySelector(".passwordinput").id]="no";
+      removeStar(groupName);
+    } else {
+      starred[element.parentNode.querySelector(".passwordcont").querySelector(".passwordinput").id]="yes";
+      addStar(groupDiv.cloneNode(true));
+    }
+    updateStars();
+  }
+
   async function setTarget(element){
     localStorage.removeItem("groupname");
     localStorage.setItem('targetuser',element.dataset.group);
   }
   
   async function join(element){
+    document.getElementsByClassName("sections-container")[0].style.pointerEvents="none";
     var nopassword=await getText(localStorage.getItem("server")+"group.php/?val=v&group="+element.dataset.group+"&password=none");
     nopassword=nopassword.trim();
     if (nopassword!=="Valid"){
+      element.parentNode.querySelector('.passwordcont').style.display="flex";
+      element.parentNode.querySelector('.passwordcont').querySelector(".passwordinput").value=groupPasswords[element.parentNode.querySelector('.passwordcont').querySelector(".passwordinput").id].password;
+      /*
       var passwordinuse=document.getElementById(element.dataset.group).value;
       var verify=await getText(localStorage.getItem("server")+"group.php/?val=v&group="+element.dataset.group+"&password="+passwordinuse);
       verify = verify.trim();
@@ -163,10 +378,36 @@
             document.getElementById(element.dataset.group).style.animation=null;
           });
       }
+      */
     } else {
       localStorage.removeItem("targetuser");
       localStorage.setItem("groupname",element.dataset.group);
       localStorage.setItem("grouppassword","none");
+      document.getElementsByClassName("sections-container")[0].style.pointerEvents="all";
+    }
+  }
+
+  function closePassword(element){
+    element.parentNode.style.display='none';
+    document.getElementsByClassName("sections-container")[0].style.pointerEvents="all";
+  }
+
+  async function finishJoin(element){
+    var passwordinuse=element.parentNode.querySelector('input').value;
+    var verify=await getText(localStorage.getItem("server")+"group.php/?val=v&group="+element.parentNode.querySelector('input').id+"&password="+passwordinuse);
+    verify = verify.trim();
+    if (verify==="Valid"){
+      localStorage.removeItem("targetuser");
+      localStorage.setItem("groupname",element.parentNode.querySelector('input').id);
+      localStorage.setItem("grouppassword",passwordinuse);
+      updatePasswords();
+      document.getElementsByClassName("sections-container")[0].style.pointerEvents="all";
+      element.parentNode.style.display="none";
+    } else {
+      element.parentNode.querySelector('input').style.animation='shake 0.5s';
+      element.parentNode.querySelector('input').addEventListener('animationend',() => {
+          element.parentNode.querySelector('input').style.animation=null;
+        });
     }
   }
 
@@ -174,6 +415,7 @@
   if (!params.get("dm")){
     async function start(){
       groups=await getText(localStorage.getItem("server")+"group.php?val=r&group=&password=");
+      document.getElementById("dms").style.display="none";
       var grouplines=groups.toString().split("|");
       var groupjson={groups: []};
       for(var i=0;i<grouplines.length-1;i++){
@@ -181,33 +423,39 @@
         tempjson.name=grouplines[i];
         groupjson.groups.push(tempjson);
       }
+
+      groupjson.groups.sort( () => Math.random()-0.5 );
       
       for (var i=0;i<groupjson.groups.length;i++){
         var groupdiv=document.createElement("div");
         groupdiv.className="groupbox";
 
         if (groupjson.groups[i].name!=localStorage.getItem("groupname")){
-          groupdiv.innerHTML="<div class='grouptext'>"+filter(groupjson.groups[i].name)+"</div><input class='passwordinput' placeholder='Password...' style='display:none;' type='password' id='"+escapeHTML(groupjson.groups[i].name)+"'><button class='groupbutton' data-group='"+escapeHTML(groupjson.groups[i].name)+"' onclick='join(this);'>Join</button>";
+          groupdiv.innerHTML="<img class='star' src='/images/stardark.png' onclick='star(this)'><div class='grouptext'>"+filter(groupjson.groups[i].name)+"</div><div class='passwordcont'><h1 class='paswordhead'>Password</h1><input class='passwordinput' placeholder='Password...' type='password' id="+groupjson.groups[i].name+"><button class='groupbutton' onclick='finishJoin(this);' style='top:3vh;'>Join</button><button class='x' onclick='closePassword(this);'>x</button></div><button class='groupbutton' data-group='"+escapeHTML(groupjson.groups[i].name)+"' onclick='join(this);'>Join</button>";
         } else {
-          groupdiv.innerHTML="<div class='grouptext'>"+filter(groupjson.groups[i].name)+"</div><input class='passwordinput' placeholder='Password...' style='display:none;' type='password' id='"+escapeHTML(groupjson.groups[i].name)+"'><button class='groupbutton' data-group='"+escapeHTML(groupjson.groups[i].name)+"' onclick='join(this);' disabled>Joined</button>";
+          groupdiv.innerHTML="<img class='star' src='/images/stardark.png' onclick='star(this);'><div class='grouptext'>"+filter(groupjson.groups[i].name)+"</div><div class='passwordcont'><h1 class='paswordhead'>Password</h1><input class='passwordinput' placeholder='Password...' type='password' id="+groupjson.groups[i].name+"><button class='groupbutton' onclick='finishJoin(this);' style='top:3vh;'>Join</button><button class='x' onclick='closePassword(this);'>x</button></div><button class='groupbutton' data-group='"+escapeHTML(groupjson.groups[i].name)+"' onclick='join(this);' disabled>Joined</button>";
         }
         document.getElementById("groups").appendChild(groupdiv);
+
+        if (starred[groupjson.groups[i].name]=="yes"){
+          document.getElementById("favorites").appendChild(groupdiv.cloneNode(true));
+        }
 
         if (!groupPasswords[groupjson.groups[i].name]){
           groupPasswords[groupjson.groups[i].name]={password:""};
         }
-
-        document.getElementsByClassName("passwordinput")[document.getElementsByClassName("passwordinput").length-1].value=groupPasswords[groupjson.groups[i].name].password;
-
+        /*
         var nopassword=await getText(localStorage.getItem("server")+"group.php/?val=v&group="+groupjson.groups[i].name+"&password=none");
         if (nopassword!="Valid"){
           document.getElementById(groupjson.groups[i].name).style.display="block";
-        }
+        }*/
       }
-      document.getElementsByClassName("groupbox")[0].style.borderTop="3px solid black";
+      updateStars();
     }
     start();
   } else {
+    document.getElementsByClassName("sections-container")[0].style.display="none";
+
     var dms;
     async function start(){
       dms=await getText(localStorage.getItem("server")+"opendm.php?val=r&currentuser="+clientuser+"&up="+clientpassword+"&targetuser=");
@@ -221,18 +469,18 @@
       
       for (var i=0;i<dmjson.dms.length;i++){
         var dmdiv=document.createElement("div");
-        dmdiv.className="groupbox";
+        dmdiv.className="dmbox";
 
         if (dmjson.dms[i].name!=localStorage.getItem("targetuser")){
-          dmdiv.innerHTML="<div class='unread'></div><div class='grouptext'>"+filter(dmjson.dms[i].name)+"</div><input class='passwordinput' placeholder='Password...' style='display:none;' type='password' id='"+escapeHTML(dmjson.dms[i].name)+"'><button class='groupbutton' data-group='"+escapeHTML(dmjson.dms[i].name)+"' onclick='setTarget(this);'>Message</button>";
+          dmdiv.innerHTML="<div class='unread'></div><div class='dmtext'>"+filter(dmjson.dms[i].name)+"</div><input class='dminput' placeholder='Password...' style='display:none;' type='password' id='"+escapeHTML(dmjson.dms[i].name)+"'><button class='dmbutton' data-group='"+escapeHTML(dmjson.dms[i].name)+"' onclick='setTarget(this);'>Message</button>";
         } else {
-          dmdiv.innerHTML="<div class='unread'></div><div class='grouptext'>"+filter(dmjson.dms[i].name)+"</div><input class='passwordinput' placeholder='Password...' style='display:none;' type='password' id='"+escapeHTML(dmjson.dms[i].name)+"'><button class='groupbutton' data-group='"+escapeHTML(dmjson.dms[i].name)+"' onclick='setTarget(this);' disabled>Messaging</button>";
+          dmdiv.innerHTML="<div class='unread'></div><div class='dmtext'>"+filter(dmjson.dms[i].name)+"</div><input class='dminput' placeholder='Password...' style='display:none;' type='password' id='"+escapeHTML(dmjson.dms[i].name)+"'><button class='dmbutton' data-group='"+escapeHTML(dmjson.dms[i].name)+"' onclick='setTarget(this);' disabled>Messaging</button>";
         }
-        document.getElementById("groups").appendChild(dmdiv);
+        document.getElementById("dms").appendChild(dmdiv);
 
         document.getElementById(dmjson.dms[i].name).style.display="none";
       }
-      document.getElementsByClassName("groupbox")[0].style.borderTop="3px solid black";
+      document.getElementsByClassName("dmbox")[0].style.borderTop="3px solid black";
       
       async function updateDM(){
         var newdm=await getText(localStorage.getItem("server")+"opendm.php?val=r&currentuser="+clientuser+"&up="+clientpassword+"&targetuser=");
@@ -249,7 +497,7 @@
         for (var i=0;i<parts.length;i++){
           var segments=parts[i].split(":");
           if (segments[1]=="unread" && segments[0]!=""){
-            var users=document.getElementsByClassName("grouptext");
+            var users=document.getElementsByClassName("dmtext");
             for (var u=0;u<users.length;u++){
               if (users[u].innerHTML==segments[0]){
                 document.getElementsByClassName("unread")[u].style.display="block";
@@ -258,7 +506,7 @@
                 break;
               } else {
                 document.getElementsByClassName("unread")[u].style.display="none";
-              document.getElementsByClassName("grouptext")[u].style.left="5px";
+              document.getElementsByClassName("dmtext")[u].style.left="5px";
               }
             }
             if (!found){
@@ -271,4 +519,42 @@
     }
     start();
   }
+
+
+  var sectionHeight="84.5vh";
+  
+  function opensection(id) {
+    /*
+  if (id=="groups"){
+    document.getElementById("favorites").style.height=sectionHeight;
+  } else {
+    document.getElementById("groups").style.height="0vh";
+  }
+  var element=document.getElementById(id);
+  if (element.style.height == sectionHeight){
+      element.style.height="0vh";
+      if (id=="groups"){
+        //document.getElementById("favorites").style.height=sectionHeight;
+      } else {
+        //document.getElementById("groups").style.height=sectionHeight;
+      }
+      document.getElementById("groups").style.height=sectionHeight;
+  } else {
+    element.style.height=sectionHeight;
+  }
+  */
+
+    document.getElementById("favorites").style.height=sectionHeight;
+
+  if (document.getElementById("groups").style.height=="0vh"){
+    document.getElementById("groups").style.height=sectionHeight;
+    document.getElementById("favoritesheader").innerText="All";
+  } else {
+    document.getElementById("groups").style.height="0vh";
+    document.getElementById("favoritesheader").innerText="Favorites";
+  }
+}
+
+opensection();
+  opensection();
 </script>

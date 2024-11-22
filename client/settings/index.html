@@ -126,11 +126,10 @@
   if (localStorage.getItem("allowSwears")=="yes"){
   	document.getElementById("swearFilter").checked = false;
   }
-  if (localStorage.getItem("darkMode")!="yes"){
-	document.getElementById("darkMode").checked=false;
-  }
-  if (localStorage.getItem("notifications")!="yes"){
-	document.getElementById("darkMode").checked=false;
+  if (localStorage.getItem("darkMode")=="yes"){
+	document.getElementById("darkMode").checked=true;
+  } else {
+        document.getElementById("darkMode").checked=false;
   }
 	
 
